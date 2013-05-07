@@ -7,7 +7,42 @@
 
 
 (function() {
-  var Player;
+  var Enemy, Player, World;
+
+  World = (function() {
+    var Bullets, Enemies, Players;
+
+    Players = {};
+
+    Enemies = {};
+
+    Bullets = {};
+
+    function World() {
+      this.bx1 = 0;
+      this.bx2 = 1000;
+      this.by1 = 0;
+      this.by2 = 1000;
+    }
+
+    World.prototype.AddPlayer = function(pl) {
+      Players.push(pl);
+      return alert("Player was added");
+    };
+
+    World.prototype.AddEnemy = function(en) {
+      Enemies.push(en);
+      return alert("Enemy was added");
+    };
+
+    World.prototype.AddBullet = function(bullet) {
+      Bullets.push(bullet);
+      return alert("Bullet was added");
+    };
+
+    return World;
+
+  })();
 
   Player = (function() {
 
@@ -25,8 +60,10 @@
           break;
         case 'undefined':
           this.name = "Player" + (Math.ceil(Math.random() * 1000));
-          this.x = Math.ceil(Math.random() * 500);
-          this.y = Math.ceil(Math.random() * 500);
+          this.x = 700;
+          this.y = 350;
+          this.ml = "" + (String.fromCharCode(Math.ceil(65 + Math.random() * 25)));
+          this.mr = "L";
           break;
         default:
           throw "Wrong player constructor.";
@@ -34,7 +71,15 @@
     }
 
     Player.prototype.html = function() {
-      return "<div id='" + this.name + "' class='player' style='background: rgb(" + (Math.ceil(Math.random() * 256)) + "," + (Math.ceil(Math.random() * 256)) + "," + (Math.ceil(Math.random() * 256)) + ")'>" + this.name + "</div>";
+      return "<div id='" + this.name + "' class='player'>\n   <div class='left' style='background:rgb(" + 50 + "," + 255 + "," + 20 + ");display: inline-block;width: 10px;'>" + this.ml + "</div>\n   <div class=\"main\" style='background:rgb(" + 255 + "," + 0 + "," + 0 + ");display: inline-block;width: 70px;'>" + this.name + "</div>\n   <div class='right' style='background:rgb(" + 50 + "," + 255 + "," + 20 + ");display: inline-block;width:20px;'>" + this.mr + "</div>\n</div>";
+      /*
+      $("##{@name} .left")
+      
+      
+      $("##{@name}").css('left', '10px')
+      a = $("##{@name}").css('left')
+      */
+
     };
 
     Player.prototype.raw = function() {
@@ -58,14 +103,74 @@
 
   })();
 
+  Enemy = (function() {
+
+    function Enemy(obj, x, y) {
+      switch (typeof obj) {
+        case 'string':
+          this.name = obj;
+          this.x = x;
+          this.y = y;
+          break;
+        case 'object':
+          this.name = obj.name;
+          this.x = obj.x;
+          this.y = obj.y;
+          break;
+        case 'undefined':
+          this.name = "Enemy" + (Math.ceil(Math.random() * 1000));
+          this.x = Player.x;
+          this.y = Player.y;
+          this.cd = "23";
+          break;
+        default:
+          throw "Wrong enemy constructor.";
+      }
+    }
+
+    Enemy.prototype.html = function() {
+      return "    <div id='" + this.name + "' class='player' style='background: rgb(" + 0 + "," + 208 + "," + 255 + ")'>" + this.name + "       <div id='" + this.name + "' class='player' style='background: rgb(" + 50 + "," + 255 + "," + 20 + ")'>" + this.cd + "</div>    </div>    ";
+    };
+
+    Enemy.prototype.raw = function() {
+      return {
+        name: this.name,
+        x: this.x,
+        y: this.y
+      };
+    };
+
+    Enemy.prototype.change = function(obj) {
+      if (obj.x != null) {
+        this.x = obj.x;
+      }
+      if (obj.y != null) {
+        return this.y = obj.y;
+      }
+    };
+
+    return Enemy;
+
+  })();
+
   if (typeof module !== "undefined" && module !== null) {
     module.exports = {
-      Player: Player
+      Player: Player,
+      Enemy: Enemy,
+      World: World
     };
   }
 
   if (typeof window !== "undefined" && window !== null) {
     window.Player = Player;
+  }
+
+  if (typeof window !== "undefined" && window !== null) {
+    window.Enemy = Enemy;
+  }
+
+  if (typeof window !== "undefined" && window !== null) {
+    window.World = World;
   }
 
 }).call(this);

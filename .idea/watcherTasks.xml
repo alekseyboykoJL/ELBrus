@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-    <TaskOptions isEnabled="true">
-      <option name="arguments" value="&quot;C:\Project\node_modules\coffee-script\bin\coffee&quot;  --map --compile $FileName$" />
+    <TaskOptions isEnabled="false">
+      <option name="arguments" value="&quot;I:\node_modules\coffee-script\bin\coffee&quot;  --map --compile $FileName$" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="Compiles .coffee files into .js files" />
       <option name="exitCodeBehavior" value="ERROR" />
@@ -15,7 +15,7 @@
       </option>
       <option name="outputFromStdout" value="false" />
       <option name="passParentEnvs" value="true" />
-      <option name="program" value="C:\Project\nodejs\node.exe" />
+      <option name="program" value="I:\Programs\nodejs\node.exe" />
       <option name="scopeName" value="Project Files" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />

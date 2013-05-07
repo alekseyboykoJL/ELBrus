@@ -40,7 +40,7 @@
 
   io.sockets.on('connection', function(socket) {
     socket.on('add user', function(player) {
-      players[player.name] = new model.Player(player);
+      players[player.name] = new model.Player(player.name, player.x, player.y);
       return socket.broadcast.emit('user have been added', players[player.name].raw());
     });
     return socket.on('change user', function(player) {
@@ -49,6 +49,18 @@
       }
       return socket.broadcast.emit('user have been changed', players[player.name].raw());
     });
+    /*
+    socket.on('add enemy', (enemy) ->
+      enemies[enemy.name] = new model.Enemy(enemy)
+      socket.broadcast.emit('enemy have been added', enemies[enemy.name].raw())
+      )
+    
+    socket.on('change enemy', (enemy) ->
+      if enemies[enemy.name]? then enemies[enemy.name].change(enemy)
+      socket.broadcast.emit('enemy have been changed', enemies[enemy.name].raw())
+      )
+    */
+
   });
 
 }).call(this);
