@@ -11,7 +11,7 @@
 
   (function($) {
     return $(document).ready(function() {
-      var Viewer, en, me, setPlayerDiv, socket;
+      var Viewer, Wc, en, me, setPlayerDiv, socket;
       socket = io.connect(document.URL.match(/^http:\/\/[^/]*/));
       Viewer = function(obj) {
         var html;
@@ -33,15 +33,23 @@
         plDiv.css('left', pl.x + 'px');
         return plDiv.css('top', pl.y + 'px');
       };
+      Wc = new World();
+      alert("Wc.name=" + Wc.name);
       me = new Player();
       en = new Enemy();
       setPlayerDiv(me);
-      socket.emit('add user', me.raw());
-      socket.on('user have been added', function(data) {
-        return setPlayerDiv(new Player(data));
+      socket.emit('add user', me);
+      socket.on('Shut Up And Take My World', function(Ws) {
+        return alert("Wc.name=" + Wc.name);
+      });
+      socket.on('user have been added', function(pl) {
+        setPlayerDiv(new Player(pl));
+        Wc.AddPlayer(pl);
+        return alert("Joined " + Wc.Players[pl.name].name);
       });
       socket.on('user have been changed', function(data) {
-        return setPlayerDiv(new Player(data));
+        setPlayerDiv(new Player(data));
+        return Wc.ChangePlayer(pl);
       });
       socket.on('enemy have been added', function(data) {
         return setPlayerDiv(new Enemy(data));
@@ -81,23 +89,23 @@
           en.x = Math.ceil(Math.random() * 500);
           en.y = Math.ceil(Math.random() * 500);
           setPlayerDiv(en);
-          socket.emit('change enemy', en.raw());
+          socket.emit('change enemy', en);
         }
         if (String.fromCharCode(e.keyCode) === me.ml) {
           me.x -= 10;
           me.ml = "" + (String.fromCharCode(Math.ceil(65 + Math.random() * 25)));
           setPlayerDiv(me);
-          socket.emit('change user', me.raw());
+          socket.emit('change user', me);
         }
         if (String.fromCharCode(e.keyCode) === me.mr) {
           me.x += 10;
           me.mr = "" + (String.fromCharCode(Math.ceil(65 + Math.random() * 25)));
           setPlayerDiv(me);
-          socket.emit('change user', me.raw());
+          socket.emit('change user', me);
         }
         if ((37 <= (_ref = e.keyCode) && _ref <= 40)) {
           setPlayerDiv(me);
-          return socket.emit('change user', me.raw());
+          return socket.emit('change user', me);
         }
       });
     });

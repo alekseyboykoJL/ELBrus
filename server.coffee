@@ -23,20 +23,19 @@ model = require('./js/model.js') # loading common model for game
 
 players = {}
 #enemies = {}
-#W = new World()
+Ws = new model.World()
 
 io.sockets.on('connection', (socket) ->
   #Player
-
-  socket.on('add user', (player) ->
-   #W.AddPlayer(player)
-    players[player.name] = new model.Player(player.name, player.x, player.y)
-    socket.broadcast.emit('user have been added', players[player.name].raw())
+  socket.on('add user', (pl) ->
+      Ws.AddPlayer(pl)
+      socket.emit('Shut Up And Take My World', Ws)
+      #players[player.name] = new model.Player(player.name, player.x, player.y)
+      socket.broadcast.emit('user have been added', pl )
   )
-
-  socket.on('change user', (player) ->
-    if players[player.name]? then players[player.name].change(player)
-    socket.broadcast.emit('user have been changed', players[player.name].raw())
+  socket.on('change user', (pl) ->
+    Ws.ChangePlayer(pl)
+    socket.broadcast.emit('user have been changed', pl)
   )
 
   #Enemy

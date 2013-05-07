@@ -3,23 +3,37 @@
 ###
 
 class World
-  Players = {}
   Enemies = {}
   Bullets = {}
-  constructor: ()->
-    @bx1 = 0
-    @bx2 = 1000
-    @by1 = 0
-    @by2 = 1000
-  AddPlayer : (pl)->
-    Players.push(pl)
-    alert "Player was added"
+  constructor : (obj) ->
+    switch typeof obj
+      when 'undefined'
+        @name = "World#{Math.ceil(Math.random() * 1000)}"
+        @Players = {}
+        @bx1 = 0
+        @bx2 = 1000
+        @by1 = 0
+        @by2 = 1000
+      else
+        if(obj instanceof World)
+            @Players = obj.Players
+            @name = obj.name
+            @bx1 = obj.bx1
+            @bx2 = obj.bx2
+            @by1 = obj.by1
+            @by2 = obj.by2
+        else throw "Wrong world constructor."
+
+
+  AddPlayer : (pl) ->
+    @Players[pl.name] = pl
   AddEnemy: (en)->
-    Enemies.push(en)
-    alert "Enemy was added"
+    #Enemies.push(en)
   AddBullet: (bullet)->
-    Bullets.push(bullet)
-    alert "Bullet was added"
+    #Bullets.push(bullet)
+  constructor
+  ChangePlayer :(pl)->
+    if @Players[pl.name]? then @Players[pl.name] = pl
 
 class Player
   constructor: (obj, x, y) ->
@@ -66,6 +80,7 @@ class Player
   change: (obj) ->
     @x = obj.x if obj.x?
     @y = obj.y if obj.y?
+
 
 class Enemy
   constructor: (obj, x, y) ->

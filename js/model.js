@@ -10,34 +10,50 @@
   var Enemy, Player, World;
 
   World = (function() {
-    var Bullets, Enemies, Players;
-
-    Players = {};
+    var Bullets, Enemies;
 
     Enemies = {};
 
     Bullets = {};
 
-    function World() {
-      this.bx1 = 0;
-      this.bx2 = 1000;
-      this.by1 = 0;
-      this.by2 = 1000;
+    function World(obj) {
+      switch (typeof obj) {
+        case 'undefined':
+          this.name = "World" + (Math.ceil(Math.random() * 1000));
+          this.Players = {};
+          this.bx1 = 0;
+          this.bx2 = 1000;
+          this.by1 = 0;
+          this.by2 = 1000;
+          break;
+        default:
+          if (obj instanceof World) {
+            this.Players = obj.Players;
+            this.name = obj.name;
+            this.bx1 = obj.bx1;
+            this.bx2 = obj.bx2;
+            this.by1 = obj.by1;
+            this.by2 = obj.by2;
+          } else {
+            throw "Wrong world constructor.";
+          }
+      }
     }
 
     World.prototype.AddPlayer = function(pl) {
-      Players.push(pl);
-      return alert("Player was added");
+      return this.Players[pl.name] = pl;
     };
 
-    World.prototype.AddEnemy = function(en) {
-      Enemies.push(en);
-      return alert("Enemy was added");
-    };
+    World.prototype.AddEnemy = function(en) {};
 
-    World.prototype.AddBullet = function(bullet) {
-      Bullets.push(bullet);
-      return alert("Bullet was added");
+    World.prototype.AddBullet = function(bullet) {};
+
+    constructor;
+
+    World.prototype.ChangePlayer = function(pl) {
+      if (this.Players[pl.name] != null) {
+        return this.Players[pl.name] = pl;
+      }
     };
 
     return World;

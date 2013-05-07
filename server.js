@@ -7,7 +7,7 @@
 
 
 (function() {
-  var app, fs, io, model, players;
+  var Ws, app, fs, io, model, players;
 
   fs = require('fs');
 
@@ -38,16 +38,17 @@
 
   players = {};
 
+  Ws = new model.World();
+
   io.sockets.on('connection', function(socket) {
-    socket.on('add user', function(player) {
-      players[player.name] = new model.Player(player.name, player.x, player.y);
-      return socket.broadcast.emit('user have been added', players[player.name].raw());
+    socket.on('add user', function(pl) {
+      Ws.AddPlayer(pl);
+      socket.emit('Shut Up And Take My World', Ws);
+      return socket.broadcast.emit('user have been added', pl);
     });
-    return socket.on('change user', function(player) {
-      if (players[player.name] != null) {
-        players[player.name].change(player);
-      }
-      return socket.broadcast.emit('user have been changed', players[player.name].raw());
+    return socket.on('change user', function(pl) {
+      Ws.ChangePlayer(pl);
+      return socket.broadcast.emit('user have been changed', pl);
     });
     /*
     socket.on('add enemy', (enemy) ->
